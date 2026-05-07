@@ -3,6 +3,16 @@ name: design
 description: Stage 2 of v8.5 demo blueprint. Read requirements.md and produce a brief design.md describing structure / data flow.
 ---
 
+> ## ⚠ MANDATORY end-of-task protocol (node: design)
+> You **MUST** end this session with these two final actions:
+> 1. Bash, run exactly ONE of these (substitute `<reason>` / `<path>` with real values; omit `--artifact` if no file produced):
+>    - Success: {{ADVANCE_OK artifact=<path>}}
+>    - Failure: {{ADVANCE_FAIL notes=<reason>}}
+>    - Blocked: {{ADVANCE_BLOCKED notes=<reason>}}
+> 2. Final msg: `## Node design Complete · <status> · <artifact>` then `[End of session — DO NOT proceed]`
+> About to choose `blocked`? Call **AskUserQuestion** FIRST and let the user decide; report `blocked` only if the user explicitly wants to halt.
+> All user questions MUST go through **AskUserQuestion** — never ask in plain text in your assistant output.
+
 # 设计
 
 ## 输入
