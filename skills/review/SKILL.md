@@ -3,16 +3,6 @@ name: review
 description: Body skill of v8.5 demo blueprint loop "iter" (after dev). Verify task.output file exists + non-empty; write a review note; always advance OK.
 ---
 
-> ## ⚠ MANDATORY end-of-task protocol (node: review)
-> You **MUST** end this session with these two final actions:
-> 1. Bash, run exactly ONE of these (substitute `<reason>` / `<path>` with real values; omit `--artifact` if no file produced):
->    - Success: {{ADVANCE_OK artifact=<path>}}
->    - Failure: {{ADVANCE_FAIL notes=<reason>}}
->    - Blocked: {{ADVANCE_BLOCKED notes=<reason>}}
-> 2. Final msg: `## Node review Complete · <status> · <artifact>` then `[End of session — DO NOT proceed]`
-> About to choose `blocked`? Call **AskUserQuestion** FIRST and let the user decide; report `blocked` only if the user explicitly wants to halt.
-> All user questions MUST go through **AskUserQuestion** — never ask in plain text in your assistant output.
-
 # 迭代开发 · 简易 Review
 
 本 skill 是 loop `iter` 的 body 第二步，跟在 `dev` 之后跑。校验 dev 产出的 `task.output` 文件存在且非空，写一份 review 摘要。**始终 ADVANCE_OK**（demo 顺畅，不阻塞 loop）。

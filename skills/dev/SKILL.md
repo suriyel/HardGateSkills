@@ -3,16 +3,6 @@ name: dev
 description: Body skill of v8.5 demo blueprint loop "iter". Implement one task per iteration; write real code to task.output (cwd-relative).
 ---
 
-> ## ⚠ MANDATORY end-of-task protocol (node: dev)
-> You **MUST** end this session with these two final actions:
-> 1. Bash, run exactly ONE of these (substitute `<reason>` / `<path>` with real values; omit `--artifact` if no file produced):
->    - Success: {{ADVANCE_OK artifact=<path>}}
->    - Failure: {{ADVANCE_FAIL notes=<reason>}}
->    - Blocked: {{ADVANCE_BLOCKED notes=<reason>}}
-> 2. Final msg: `## Node dev Complete · <status> · <artifact>` then `[End of session — DO NOT proceed]`
-> About to choose `blocked`? Call **AskUserQuestion** FIRST and let the user decide; report `blocked` only if the user explicitly wants to halt.
-> All user questions MUST go through **AskUserQuestion** — never ask in plain text in your assistant output.
-
 # 迭代开发（单任务）
 
 本 skill 是 loop `iter` 的 body。每次迭代调用 bp-context 拉取当前 task 数据，**写出真实可运行代码到 `task.output` 路径**（相对 cwd 根）。

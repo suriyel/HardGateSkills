@@ -3,16 +3,6 @@ name: decompose
 description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a tasks JSON array, seed the downstream loop via bp-tasks.
 ---
 
-> ## ⚠ MANDATORY end-of-task protocol (node: decompose)
-> You **MUST** end this session with these two final actions:
-> 1. Bash, run exactly ONE of these (substitute `<reason>` / `<path>` with real values; omit `--artifact` if no file produced):
->    - Success: {{ADVANCE_OK artifact=<path>}}
->    - Failure: {{ADVANCE_FAIL notes=<reason>}}
->    - Blocked: {{ADVANCE_BLOCKED notes=<reason>}}
-> 2. Final msg: `## Node decompose Complete · <status> · <artifact>` then `[End of session — DO NOT proceed]`
-> About to choose `blocked`? Call **AskUserQuestion** FIRST and let the user decide; report `blocked` only if the user explicitly wants to halt.
-> All user questions MUST go through **AskUserQuestion** — never ask in plain text in your assistant output.
-
 # 需求拆解
 
 ## 输入
