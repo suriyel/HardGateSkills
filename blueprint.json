@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "id": "demo",
+  "version": "1.0.0",
+  "title": "v8.5 测试蓝图",
+  "description": "minimal 4-step blueprint: 需求→设计→拆解→迭代开发",
+  "startNode": "requirements",
+  "nodes": [
+    {
+      "id": "requirements",
+      "title": "需求分析",
+      "skillRef": "claude:bp-demo/requirements",
+      "x": 92,
+      "y": 79
+    },
+    {
+      "id": "design",
+      "title": "设计",
+      "skillRef": "claude:bp-demo/design",
+      "x": 103,
+      "y": 215.00001525878906
+    },
+    {
+      "id": "decompose",
+      "title": "需求拆解",
+      "skillRef": "claude:bp-demo/decompose",
+      "x": 100,
+      "y": 340
+    },
+    {
+      "id": "iter",
+      "kind": "loop",
+      "title": "迭代开发",
+      "x": 100,
+      "y": 480,
+      "iterator": {
+        "kind": "tasks",
+        "tasksSchemaRef": "default",
+        "selectStrategy": "first-pending"
+      },
+      "body": {
+        "startNode": "dev",
+        "nodes": [
+          {
+            "id": "dev",
+            "title": "实现一个任务",
+            "skillRef": "claude:bp-demo/dev",
+            "x": 47,
+            "y": 71
+          },
+          {
+            "id": "review",
+            "title": "Review",
+            "skillRef": "claude:bp-demo/review",
+            "x": 220,
+            "y": 71
+          }
+        ],
+        "edges": [
+          {
+            "from": "dev",
+            "to": "review",
+            "when": "status == \"ok\""
+          }
+        ]
+      },
+      "maxIterations": 5
+    }
+  ],
+  "edges": [
+    {
+      "from": "requirements",
+      "to": "design",
+      "when": "status == \"ok\""
+    },
+    {
+      "from": "design",
+      "to": "decompose",
+      "when": "status == \"ok\""
+    },
+    {
+      "from": "decompose",
+      "to": "iter",
+      "when": "status == \"ok\""
+    }
+  ],
+  "tasksSchemas": {
+    "default": {
+      "requiredFields": {
+        "id": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "default": "pending"
+        }
+      },
+      "recommendedFields": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "userFields": {},
+      "extensionFieldsAllowed": true,
+      "doneValues": [
+        "done"
+      ],
+      "example": {
+        "id": 1,
+        "title": "实现登录页",
+        "description": "构造一个简单的 HTML 登录表单（用户名+密码+按钮）",
+        "status": "pending"
+      }
+    }
+  }
+}

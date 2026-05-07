@@ -1,0 +1,49 @@
+{
+  "bpId": "demo",
+  "copiedAt": "2026-05-07T00:58:49.253Z",
+  "headerVersion": 5,
+  "skills": [
+    {
+      "originalRef": "claude:bp-demo/requirements",
+      "newRef": "claude:bp-demo/requirements",
+      "tool": "claude",
+      "name": "requirements",
+      "source": "reuse",
+      "schemaPlaceholdersRendered": 0
+    },
+    {
+      "originalRef": "claude:bp-demo/design",
+      "newRef": "claude:bp-demo/design",
+      "tool": "claude",
+      "name": "design",
+      "source": "reuse",
+      "schemaPlaceholdersRendered": 0
+    },
+    {
+      "originalRef": "claude:bp-demo/decompose",
+      "newRef": "claude:bp-demo/decompose",
+      "tool": "claude",
+      "name": "decompose",
+      "source": "reuse",
+      "schemaPlaceholdersRendered": 1
+    },
+    {
+      "originalRef": "claude:bp-demo/dev",
+      "newRef": "claude:bp-demo/dev",
+      "tool": "claude",
+      "name": "dev",
+      "source": "reuse",
+      "schemaPlaceholdersRendered": 0,
+      "containerLoop": "iter"
+    },
+    {
+      "originalRef": "claude:bp-demo/review",
+      "newRef": "claude:bp-demo/review",
+      "tool": "claude",
+      "name": "review",
+      "source": "reuse",
+      "schemaPlaceholdersRendered": 0,
+      "containerLoop": "iter"
+    }
+  ]
+}
