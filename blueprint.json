@@ -3,7 +3,6 @@
   "id": "demo",
   "version": "1.0.0",
   "title": "v8.5 测试蓝图",
-  "description": "minimal 4-step blueprint: 需求→设计→拆解→迭代开发",
   "startNode": "requirements",
   "nodes": [
     {
@@ -18,7 +17,7 @@
       "title": "设计",
       "skillRef": "claude:bp-demo/design",
       "x": 103,
-      "y": 215.00001525878906
+      "y": 215
     },
     {
       "id": "decompose",
@@ -114,7 +113,7 @@
       "example": {
         "id": 1,
         "title": "实现登录页",
-        "description": "构造一个简单的 HTML 登录表单（用户名+密码+按钮）",
+        "description": "构造一个简单的 HTML 登录表单",
         "status": "pending"
       }
     }
