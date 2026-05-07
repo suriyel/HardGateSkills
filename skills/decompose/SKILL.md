@@ -3,6 +3,16 @@ name: decompose
 description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a tasks JSON array, seed the downstream loop via bp-tasks.
 ---
 
+> ## ⚠ MANDATORY end-of-task protocol (node: decompose)
+> You **MUST** end this session with these two final actions:
+> 1. Bash, run exactly ONE of these (substitute `<reason>` / `<path>` with real values; omit `--artifact` if no file produced):
+>    - Success: {{ADVANCE_OK artifact=<path>}}
+>    - Failure: {{ADVANCE_FAIL notes=<reason>}}
+>    - Blocked: {{ADVANCE_BLOCKED notes=<reason>}}
+> 2. Final msg: `## Node decompose Complete · <status> · <artifact>` then `[End of session — DO NOT proceed]`
+> About to choose `blocked`? Call **AskUserQuestion** FIRST and let the user decide; report `blocked` only if the user explicitly wants to halt.
+> All user questions MUST go through **AskUserQuestion** — never ask in plain text in your assistant output.
+
 # 需求拆解
 
 ## 输入
@@ -20,8 +30,9 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
   {
     "id": 1, // L1 必填: string | number
     "status": "pending", // L1 必填: string; default "pending"; doneValues=["done"] 时该 task 视为完成
-    "title": "实现登录页", // L2 optional: string
-    "description": "构造一个简单的 HTML 登录表单" // L2 optional: string
+    "title": "实现 HTML 骨架", // L2 optional: string
+    "description": "包含 DOCTYPE / head meta / body / Hello World 文本", // L2 optional: string
+    "output": "hello-world.html" // L2 optional: string
   }
 ]
 ```
@@ -39,7 +50,8 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
 ## 步骤
 
 1. Read `{{HARNESS_MEMORY_DIR}}/plans/design.md`
-2. 派生 items[] 数组（3-5 项；id 从 1 起；title 简短；description 1-2 句；status 留 `"pending"`）
+2. 派生 items[] 数组（3-5 项；id 从 1 起；title 简短；description 1-2 句说"这步要实现什么"；status 留 `"pending"`；**`output` 字段填该 task 要产出的文件相对路径，相对 cwd 根，例如 `hello-world.html`、`styles.css`、`app.js`**）
+   - 若多个 task 共写同一文件（增量加内容到同一 HTML），它们的 `output` 字段填同一路径，下游 dev skill 会用 Read → 编辑 → Write 而不是覆盖
 3. Write 数组为 JSON：`{{HARNESS_MEMORY_DIR}}/plans/tasks.json`
 4. 调 bp-tasks 把 items 注入下游 loop（**必须做，且必须在按 banner 指令上报 advance 之前**）：
    {{TASKS_SET loop=iter file={{HARNESS_MEMORY_DIR}}/plans/tasks.json}}

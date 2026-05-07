@@ -3,6 +3,7 @@
   "id": "demo",
   "version": "1.0.0",
   "title": "v8.5 测试蓝图",
+  "description": "",
   "startNode": "requirements",
   "nodes": [
     {
@@ -103,6 +104,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "output": {
+          "type": "string"
         }
       },
       "userFields": {},
@@ -112,9 +116,10 @@
       ],
       "example": {
         "id": 1,
-        "title": "实现登录页",
-        "description": "构造一个简单的 HTML 登录表单",
-        "status": "pending"
+        "title": "实现 HTML 骨架",
+        "description": "包含 DOCTYPE / head meta / body / Hello World 文本",
+        "status": "pending",
+        "output": "hello-world.html"
       }
     }
   }
