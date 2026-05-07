@@ -3,7 +3,6 @@
   "id": "demo",
   "version": "1.0.0",
   "title": "v8.5 测试蓝图",
-  "description": "",
   "startNode": "requirements",
   "nodes": [
     {
