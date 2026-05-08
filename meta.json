@@ -1,35 +1,34 @@
 {
-  "bpId": "demo",
-  "copiedAt": "2026-05-07T15:59:54.655Z",
-  "headerVersion": 5,
+  "bpId": "gate-demo",
+  "copiedAt": "2026-05-08T06:05:04.949Z",
   "skills": [
     {
-      "originalRef": "claude:bp-demo/requirements",
-      "newRef": "claude:bp-demo/requirements",
+      "originalRef": "claude:bp-gate-demo/requirements",
+      "newRef": "claude:bp-gate-demo/requirements",
       "tool": "claude",
       "name": "requirements",
       "source": "reuse",
       "schemaPlaceholdersRendered": 0
     },
     {
-      "originalRef": "claude:bp-demo/design",
-      "newRef": "claude:bp-demo/design",
+      "originalRef": "claude:bp-gate-demo/design",
+      "newRef": "claude:bp-gate-demo/design",
       "tool": "claude",
       "name": "design",
       "source": "reuse",
       "schemaPlaceholdersRendered": 0
     },
     {
-      "originalRef": "claude:bp-demo/decompose",
-      "newRef": "claude:bp-demo/decompose",
+      "originalRef": "claude:bp-gate-demo/decompose",
+      "newRef": "claude:bp-gate-demo/decompose",
       "tool": "claude",
       "name": "decompose",
       "source": "reuse",
       "schemaPlaceholdersRendered": 1
     },
     {
-      "originalRef": "claude:bp-demo/dev",
-      "newRef": "claude:bp-demo/dev",
+      "originalRef": "claude:bp-gate-demo/dev",
+      "newRef": "claude:bp-gate-demo/dev",
       "tool": "claude",
       "name": "dev",
       "source": "reuse",
@@ -37,8 +36,8 @@
       "containerLoop": "iter"
     },
     {
-      "originalRef": "claude:bp-demo/review",
-      "newRef": "claude:bp-demo/review",
+      "originalRef": "claude:bp-gate-demo/review",
+      "newRef": "claude:bp-gate-demo/review",
       "tool": "claude",
       "name": "review",
       "source": "reuse",

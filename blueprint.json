@@ -1,36 +1,36 @@
 {
   "schemaVersion": 2,
-  "id": "demo",
+  "id": "gate-demo",
   "version": "1.0.0",
-  "title": "v8.5 测试蓝图",
-  "description": "",
+  "title": "v9.0 Hard Gate 演示蓝图",
+  "description": "loop body 内 review 软打回 + gate_coverage 硬判定 — 都折返 dev",
   "startNode": "requirements",
   "nodes": [
     {
       "id": "requirements",
       "title": "需求分析",
-      "skillRef": "claude:bp-demo/requirements",
+      "skillRef": "claude:bp-gate-demo/requirements",
       "x": 92,
       "y": 79
     },
     {
       "id": "design",
       "title": "设计",
-      "skillRef": "claude:bp-demo/design",
+      "skillRef": "claude:bp-gate-demo/design",
       "x": 103,
       "y": 215
     },
     {
       "id": "decompose",
       "title": "需求拆解",
-      "skillRef": "claude:bp-demo/decompose",
+      "skillRef": "claude:bp-gate-demo/decompose",
       "x": 100,
       "y": 340
     },
     {
       "id": "iter",
       "kind": "loop",
-      "title": "迭代开发",
+      "title": "迭代开发 + 双层门禁",
       "x": 100,
       "y": 480,
       "iterator": {
@@ -44,22 +44,52 @@
           {
             "id": "dev",
             "title": "实现一个任务",
-            "skillRef": "claude:bp-demo/dev",
+            "skillRef": "claude:bp-gate-demo/dev",
             "x": 47,
             "y": 71
           },
           {
             "id": "review",
-            "title": "Review",
-            "skillRef": "claude:bp-demo/review",
+            "title": "Review (软打回)",
+            "skillRef": "claude:bp-gate-demo/review",
             "x": 220,
-            "y": 71
+            "y": 71,
+            "onFail": {
+              "rewindTo": "dev",
+              "ticketTitle": "Review 打回",
+              "maxAttempts": 3
+            }
+          },
+          {
+            "id": "gate_coverage",
+            "kind": "script",
+            "title": "覆盖率门禁 (硬判定)",
+            "description": "spawn check_coverage.js 验证任务产出文件存在并粗估覆盖率",
+            "x": 400,
+            "y": 71,
+            "script": {
+              "path": "scripts/check_coverage.js",
+              "timeoutMs": 30000,
+              "env": {
+                "MIN_COVERAGE": "80"
+              }
+            },
+            "onFail": {
+              "rewindTo": "dev",
+              "ticketTitle": "覆盖率不足",
+              "maxAttempts": 3
+            }
           }
         ],
         "edges": [
           {
             "from": "dev",
             "to": "review",
+            "when": "status == \"ok\""
+          },
+          {
+            "from": "review",
+            "to": "gate_coverage",
             "when": "status == \"ok\""
           }
         ]
