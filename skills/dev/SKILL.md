@@ -17,7 +17,8 @@ description: Body skill of v8.5 demo blueprint loop "iter". Implement one task p
    - JS：ES6+，操作 DOM 前用 `DOMContentLoaded` 守一次
 4. 若 `<task.output>` 文件已存在（多个 task 共写同一文件），改用 Read → 编辑 → Write，**不要直接覆盖**——会冲掉前一个 task 的产出。
 5. （可选）顺便 Write `{{HARNESS_MEMORY_DIR}}/plans/dev-task-<id>.md` 记录决策（标题、思路 1-2 句），不替代真实代码文件。
-6. 兜底：若 `task.output` 字段缺失，fallback 到 `task-<id>.txt` 写一个简短描述，并在 advance notes 里记一笔（让 review 标 informational warn，但不阻塞 loop）。
+
+> 契约假定：`task.output` 由上游 decompose 必填。dev 不做 schema 防御 —— 若上游真漏字段，下游 gate_coverage 会以 "产出文件未找到" 业务失败 ticket 折返本节点，按 ticket 整改即可。
 
 写完按 banner 上报：{{ADVANCE_OK artifact=<task.output>}}（artifact 字段填真实文件路径，不带 `<>`）。
 

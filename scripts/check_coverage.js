@@ -1,46 +1,67 @@
 #!/usr/bin/env node
-// v9.0 Hard Gate demo 脚本 — 由蓝图引擎在 kind='script' 节点 spawn。
+// v9.0 Hard Gate demo 脚本 — 由蓝图引擎在 kind='script' 节点 spawn.
 //
-// 契约（与 §1.4 plan 对齐）：
-//   stdin: JSON {schemaVersion, kind:'script-input', cwd, harnessRoot,
-//                blueprintId, runId, scriptNodeId, rewindTarget, attempt,
-//                previousAttempts, lastEnvelope, variables, loop}
-//   stdout: 单行 JSON {pass:bool, message:string}  ← 多余字段允许但忽略
-//   exit: 0 = 脚本本身正常（pass/fail 由 stdout.pass 决定）；非 0 = 错误
+// Stdin/Stdout 契约: 见 server-blueprint/script-io-schema.js (schemaVersion=2)
+// hardgate 引擎 / 本脚本 / 测试 / DESIGN §20.2 字段表 都从那个文件派生.
 //
-// 本脚本逻辑（演示用）：
-//   1. 读 stdin 拿到当前 task（含 task.output 文件名）
+// 业务责任划分 (DESIGN §20.6):
+//   emit(pass=false, message)  - 业务失败, 走 ticket 折返 onFail.rewindTo
+//                                (上游 LLM 真能整改的事, 如代码不够 / 文件不存在)
+//   process.exit(2)            - schema/IO 工程异常, 引擎 halted (dev 修不了的事,
+//                                如 schema 不识别 / 路径是目录 / 权限问题)
+//
+// 本脚本逻辑 (演示用):
+//   1. 读 stdin 拿到当前 task (含 task.output 文件名)
 //   2. 检查 task.output 文件是否存在于 cwd
-//   3. 如果不存在 → pass=false, message="未找到产出文件 ..."
-//   4. 如果存在 → 简单基于行数估"覆盖率"（行数 >= 10 即视为达标）
-//   5. 如果 attempt >= 2 强制 pass（演示用；真实场景应严格判定）
-//      —— 这让 demo 在 review 软打回后 + dev 整改 + gate 二次判定通过的故事完整
+//   3. 如果不存在 → emit(pass=false, message="未找到产出文件 ...")
+//   4. 如果存在 → 简单基于行数估"覆盖率" (行数 >= 10 即视为达标)
+//   5. 如果 attempt >= 2 强制 pass (演示用; 真实场景应严格判定)
 
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
+// ---- 1. 读 stdin + schema 防御 ----
 let input = '';
 try { input = fs.readFileSync(0, 'utf8'); } catch (_) {}
-let ctx = {};
-try { ctx = JSON.parse(input); } catch (_) {}
+let ctx;
+try { ctx = JSON.parse(input); }
+catch (e) { exitFatal('schema_error: invalid stdin JSON: ' + e.message); }
+if (ctx.schemaVersion !== 2) {
+  exitFatal('schema_error: unsupported script-input schemaVersion='
+    + ctx.schemaVersion + ' (this script supports 2; see DESIGN §20.11)');
+}
 
-const minCov = parseFloat(process.env.MIN_COVERAGE || '80');
-const cwd = ctx.cwd || process.cwd();
-const task = ctx.loop && ctx.loop.task;
-const taskOutput = task && task.output;
-const attempt = ctx.attempt || 1;
+function exitFatal(msg) {
+  process.stderr.write(msg + '\n');
+  process.exit(2);
+}
 
 function emit(pass, message) {
   process.stdout.write(JSON.stringify({ pass: !!pass, message: String(message || '') }));
   process.exit(0);
 }
 
-if (!taskOutput) {
-  emit(false, '当前 task 缺少 output 字段。请在 decompose 阶段为 task 显式声明 output（产出文件名）。');
-}
+// ---- 2. 取 task.output (走 v9.2+ loopStack, 不读已删的 .loop) ----
+const cwd = ctx.cwd || process.cwd();
+const minCov = parseFloat(process.env.MIN_COVERAGE || '80');
+const attempt = ctx.attempt || 1;
 
+const topFrame = (Array.isArray(ctx.loopStack) && ctx.loopStack.length > 0)
+  ? ctx.loopStack[ctx.loopStack.length - 1]
+  : null;
+const task = topFrame && topFrame.task;
+if (!task || !task.output) {
+  // 上游 decompose 漏 task.output —— §20.6 schema 异常, dev 修不了 → exit 2
+  // (而非 ticket 折返死循环). 用户应排查 decompose skill 输出, 或修 task
+  // schema 把 output 升级为 requiredField.
+  exitFatal('schema_error: task.output missing on current task '
+    + JSON.stringify(task && task.id));
+}
+const taskOutput = task.output;
+
+// ---- 3. 检查产出文件存在 (业务校验, 失败 → ticket 折返 dev) ----
 const fullPath = path.join(cwd, taskOutput);
 if (!fs.existsSync(fullPath)) {
   emit(false,
@@ -54,18 +75,22 @@ if (!fs.existsSync(fullPath)) {
   );
 }
 
+// ---- 4. 读文件 + 估覆盖率 ----
 let lineCount = 0;
 try {
   const content = fs.readFileSync(fullPath, 'utf8');
   lineCount = content.split(/\r?\n/).filter((l) => l.trim()).length;
 } catch (e) {
-  emit(false, '读取产出文件失败: ' + e.message);
+  // EISDIR / EACCES 等 IO 工程异常 → exit 2 让引擎 halted (而非 ticket 折返).
+  // 例: task.output 指向目录而非文件 → readFileSync 抛 EISDIR. dev 改不了
+  // 这种类型的事, 操作员要查 task 元数据或文件系统状态.
+  exitFatal('io_error: read ' + fullPath + ': ' + e.message);
 }
 
-// "覆盖率"占位符 — 真实场景应跑 c8 / pytest --cov 等
+// "覆盖率" 占位符 — 真实场景应跑 c8 / pytest --cov 等
 const fakeCoverage = Math.min(100, lineCount * 8);
 
-// Demo: attempt >= 2 自动通过（让用户能看到完整 fail → 整改 → pass 闭环）
+// Demo: attempt >= 2 自动通过 (让用户能看到完整 fail → 整改 → pass 闭环)
 if (attempt >= 2) {
   emit(true, 'coverage ' + fakeCoverage + '% (attempt=' + attempt + ' demo: 强制通过)');
 }

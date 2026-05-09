@@ -14,7 +14,7 @@ description: Body skill of v8.5 demo blueprint loop "iter" (after dev). Verify t
 3. Bash：`node {{SCRIPTS}}/check-task-output.js <task.output>`
    —— 用第 1 步取到的真实 task.output 替换 `<task.output>`。捕获 stdout 第一行：`PASS` / `WARN: missing` / `WARN: empty`。
    - 若 bash 返回非空 stderr，简短记下，不阻塞。
-   - 若 task.output 字段缺失，跳过本步并在结论里记 `warn (informational): no output field`。
+   - 契约假定 `task.output` 由上游 decompose 必填，本步不做缺字段防御。
 4. Write `{{HARNESS_MEMORY_DIR}}/plans/review-task-<id>.md`，含：
    - 一级标题：`# Review of task <id> — <title>`
    - "脚本结果"：贴第 3 步 stdout 第一行
