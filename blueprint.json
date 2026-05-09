@@ -10,29 +10,29 @@
       "id": "requirements",
       "title": "需求分析",
       "skillRef": "claude:bp-gate-demo/requirements",
-      "x": 92,
-      "y": 79
+      "x": 226,
+      "y": 74
     },
     {
       "id": "design",
       "title": "设计",
       "skillRef": "claude:bp-gate-demo/design",
-      "x": 103,
-      "y": 215
+      "x": 227,
+      "y": 213
     },
     {
       "id": "decompose",
       "title": "需求拆解",
       "skillRef": "claude:bp-gate-demo/decompose",
-      "x": 100,
-      "y": 340
+      "x": 216,
+      "y": 322
     },
     {
       "id": "iter",
       "kind": "loop",
       "title": "迭代开发 + 双层门禁",
-      "x": 100,
-      "y": 480,
+      "x": 467,
+      "y": 270,
       "iterator": {
         "kind": "tasks",
         "tasksSchemaRef": "default",
