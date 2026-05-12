@@ -1,29 +1,26 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "id": "gate-demo",
   "version": "1.0.0",
-  "title": "v9.0 Hard Gate 演示蓝图",
-  "description": "loop body 内 review 软打回 + gate_coverage 硬判定 — 都折返 dev",
+  "title": "v10 Hard Gate 演示蓝图",
+  "description": "loop body 内 review 软打回 + gate_coverage 硬判定 — 都折返 dev (节点自含 skill)",
   "startNode": "requirements",
   "nodes": [
     {
       "id": "requirements",
       "title": "需求分析",
-      "skillRef": "claude:bp-gate-demo/requirements",
       "x": 226,
       "y": 74
     },
     {
       "id": "design",
       "title": "设计",
-      "skillRef": "claude:bp-gate-demo/design",
       "x": 227,
       "y": 213
     },
     {
       "id": "decompose",
       "title": "需求拆解",
-      "skillRef": "claude:bp-gate-demo/decompose",
       "x": 216,
       "y": 322
     },
@@ -44,14 +41,12 @@
           {
             "id": "dev",
             "title": "实现一个任务",
-            "skillRef": "claude:bp-gate-demo/dev",
             "x": 47,
             "y": 71
           },
           {
             "id": "review",
             "title": "Review (软打回)",
-            "skillRef": "claude:bp-gate-demo/review",
             "x": 220,
             "y": 71,
             "onFail": {
