@@ -6,6 +6,7 @@ description: Stage 2 of v8.5 demo blueprint. Read requirements.md and produce a 
 # 设计
 
 ## 输入
+1
 
 `{{HARNESS_MEMORY_DIR}}/plans/requirements.md`。
 

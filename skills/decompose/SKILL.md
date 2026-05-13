@@ -20,6 +20,7 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
   {
     "id": 1, // L1 必填: string | number
     "status": "pending", // L1 必填: string; default "pending"; doneValues=["done"] 时该 task 视为完成
+    "dependencies": [], // L1 必填: array; items: string | number; default []
     "title": "实现 HTML 骨架", // L2 optional: string
     "description": "包含 DOCTYPE / head meta / body / Hello World 文本", // L2 optional: string
     "output": "hello-world.html" // L2 optional: string
@@ -27,11 +28,16 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
 ]
 ```
 
-**步骤**（在 bp-advance 之前**必须**执行）：
-1. 把派生的 items 数组持久化到 `{{HARNESS_MEMORY_DIR}}/plans/<topic>-iter-tasks.json`（`<topic>` 与本 skill 已产出的 srs/design 等 doc 同主题；文件名 LLM 自行匹配填入）
-2. 用 `--items-file` 调用 bp-tasks（避免长 JSON 拼 bash 转义问题）：
+## ⚠️ 灌入 `iter` loop（必须执行，否则 run 卡死）
+
+**漏调后果**：下游 `iter` loop 入口检测 `state.loops.iter.tasks` 为空 → halt（reason: `loop_no_tasks_seeded`）。harness 在 bp-advance 时会尝试自动 seed（v9.5 auto-seed-loops），但**必须**先把 items[] 写到下面约定路径，否则 harness 也救不了。
+
+**步骤**：
+1. 把派生的 items 数组写到 `{{HARNESS_MEMORY_DIR}}/plans/<topic>-iter-tasks.json`（`<topic>` 与本 skill 已产出的同主题文档保持一致，如 `srs` / `design` / 项目名）
+2. **在 `bp-advance` 之前**执行以下命令灌入引擎 state（仅写文件不够 — engine state.loops 不会被文件自动同步）：
 
 {{TASKS_SET loop=iter file=<path>}}
+
 （触发条件：`status == "ok"`）
 
 > 未声明字段透传，body skill 可用 `{{loop.task.<field>}}` 引用。
