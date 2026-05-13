@@ -144,7 +144,8 @@
         "title": "实现 HTML 骨架",
         "description": "包含 DOCTYPE / head meta / body / Hello World 文本",
         "status": "pending",
-        "output": "hello-world.html"
+        "output": "hello-world.html",
+        "dependencies": []
       }
     }
   }

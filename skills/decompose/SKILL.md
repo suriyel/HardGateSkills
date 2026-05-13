@@ -11,6 +11,7 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
 
 ## Tasks schema
 
+
 <!-- SCHEMA START: default -->
 ### Tasks schema "default" — items[] for `bp-tasks set iter`
 
@@ -30,18 +31,19 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
 
 ## ⚠️ 灌入 `iter` loop（必须执行，否则 run 卡死）
 
-**漏调后果**：下游 `iter` loop 入口检测 `state.loops.iter.tasks` 为空 → halt（reason: `loop_no_tasks_seeded`）。harness 在 bp-advance 时会尝试自动 seed（v9.5 auto-seed-loops），但**必须**先把 items[] 写到下面约定路径，否则 harness 也救不了。
+**漏调后果**：下游 `iter` loop 入口检测 `state.loops.iter.tasks` 为空 → halt（reason: `loop_no_tasks_seeded`）。
 
 **步骤**：
-1. 把派生的 items 数组写到 `{{HARNESS_MEMORY_DIR}}/plans/<topic>-iter-tasks.json`（`<topic>` 与本 skill 已产出的同主题文档保持一致，如 `srs` / `design` / 项目名）
-2. **在 `bp-advance` 之前**执行以下命令灌入引擎 state（仅写文件不够 — engine state.loops 不会被文件自动同步）：
+1. 根据上面 schema 结构和你的分析结果，构造 items JSON 数组（每条 task 的 id 必须唯一）
+2. **在 `bp-advance` 之前**执行以下命令将 items JSON 直接灌入引擎 state：
 
-{{TASKS_SET loop=iter file=<path>}}
+{{TASKS_SET loop=iter}}
 
 （触发条件：`status == "ok"`）
 
 > 未声明字段透传，body skill 可用 `{{loop.task.<field>}}` 引用。
 <!-- SCHEMA END: default -->
+
 
 ## 步骤
 
