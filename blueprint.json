@@ -63,7 +63,7 @@
             "x": 400,
             "y": 71,
             "script": {
-              "path": "scripts/check_coverage.js",
+              "path": "shared-scripts/check_coverage.js",
               "timeoutMs": 30000,
               "env": {
                 "MIN_COVERAGE": "80"
