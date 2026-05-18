@@ -14,5 +14,3 @@ description: Stage 1 of v8.5 demo blueprint. Extract a brief requirements doc fr
    - **项目目标**（1-2 句）
    - **核心功能**（3-5 条）
    - **非功能要求**（性能/安全/兼容性，可省）
-
-写完即按 banner 指令上报。
