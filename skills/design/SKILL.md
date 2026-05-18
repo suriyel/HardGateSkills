@@ -7,12 +7,12 @@ description: Stage 2 of v8.5 demo blueprint. Read requirements.md and produce a 
 
 ## 输入
 
-`{{HARNESS_MEMORY_DIR}}/plans/requirements.md`。
+`/plans/requirements.md`。
 
 ## 步骤
 
-1. Read `{{HARNESS_MEMORY_DIR}}/plans/requirements.md`
-2. Write `{{HARNESS_MEMORY_DIR}}/plans/design.md`，含：
+1. Read `/plans/requirements.md`
+2. Write `/plans/design.md`，含：
    - **架构概览**（1-2 段，不必详细）
    - **关键模块**（3-5 条）
    - **数据流向**（简短句子）

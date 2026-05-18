@@ -9,8 +9,8 @@ description: Stage 1 of v8.5 demo blueprint. Extract a brief requirements doc fr
 
 ## 步骤
 
-1. Bash：`mkdir -p {{HARNESS_MEMORY_DIR}}/plans/`
-2. Write `{{HARNESS_MEMORY_DIR}}/plans/requirements.md`，含：
+1. Bash：`mkdir -p /plans/`
+2. Write `/plans/requirements.md`，含：
    - **项目目标**（1-2 句）
    - **核心功能**（3-5 条）
    - **非功能要求**（性能/安全/兼容性，可省）

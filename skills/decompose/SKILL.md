@@ -7,7 +7,7 @@ description: Stage 3 of v8.5 demo blueprint. Read design.md, decompose into a ta
 
 ## 输入
 
-`{{HARNESS_MEMORY_DIR}}/plans/design.md`。
+`/plans/design.md`。
 
 ## Tasks schema
 
