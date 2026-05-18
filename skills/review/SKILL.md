@@ -7,7 +7,7 @@ description: Body skill of v8.5 demo blueprint loop "iter" (after dev). Verify t
 
 ## 步骤
 
-1. Read `/review-checklist.md` —— 把准则记在 prompt 里，作为评审依据。
+1. Read `references/review-checklist.md` —— 把准则记在 prompt 里，作为评审依据。
 3. Bash：`node script/check-task-output.js <task.output>`
    —— 用第 1 步取到的真实 task.output 替换 `<task.output>`。捕获 stdout 第一行：`PASS` / `WARN: missing` / `WARN: empty`。
    - 若 bash 返回非空 stderr，简短记下，不阻塞。
