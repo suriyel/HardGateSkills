@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 用法: node check-task-output.js <path>
+// 用法: node check-task-output.cjs <path>
 // 输出: stdout 一行 PASS / WARN: missing / WARN: empty; exit code 始终 0。
 'use strict';
 const fs = require('fs');
