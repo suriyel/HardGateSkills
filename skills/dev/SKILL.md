@@ -9,7 +9,7 @@ description: Body skill of v8.5 demo blueprint loop "iter". Implement one task p
 
 ## 步骤
 
-1. Read `references/impl-hints.md` —— 看 hello world 的 HTML / CSS / JS 实现要点。
+1. Read `references/impl-hints.md`。
 2. **写真实代码到 `<task.output>`（相对 cwd 根，例如 `hello-world.html`）**：
    - HTML：完整 DOCTYPE + `<html lang>` + head（charset/viewport/title）+ body
    - CSS：完整选择器 + 属性块，无空白文件
