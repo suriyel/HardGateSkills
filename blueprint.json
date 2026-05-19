@@ -59,11 +59,11 @@
             "id": "gate_coverage",
             "kind": "script",
             "title": "覆盖率门禁 (硬判定)",
-            "description": "spawn check_coverage.js 验证任务产出文件存在并粗估覆盖率",
+            "description": "spawn check_coverage.cjs 验证任务产出文件存在并粗估覆盖率",
             "x": 400,
             "y": 71,
             "script": {
-              "path": "shared-scripts/check_coverage.js",
+              "path": "shared-scripts/check_coverage.cjs",
               "timeoutMs": 30000,
               "env": {
                 "MIN_COVERAGE": "80"
@@ -72,7 +72,8 @@
             "onFail": {
               "rewindTo": "dev",
               "ticketTitle": "覆盖率不足",
-              "maxAttempts": 3
+              "maxAttempts": 3,
+              "when": "status != 'ok'"
             }
           }
         ],
